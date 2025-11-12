@@ -32,8 +32,8 @@ Este proyecto es una API REST construida con FastAPI para gestionar citas médic
 ## 🛠️ Instalación
 
 ```bash
-git clone https://github.com/tuusuario/appointed.git
-cd appointed
+git clone https://github.com/victorolmedo/appointmed.git
+cd appointmed
 python -m venv venv
 source venv/bin/activate  # o venv\Scripts\activate en Windows
 pip install -r requirements.txt
