@@ -17,7 +17,6 @@ Este proyecto es una API REST construida con FastAPI para gestionar citas médic
 
 ## 🧱 Estructura del proyecto
 
-
 ---
 
 ## 🔐 Roles y permisos
