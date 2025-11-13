@@ -8,6 +8,7 @@ from datetime import date as date_type
 from app.models.models import UserRole
 from typing import Optional
 from pydantic import root_validator
+from pydantic import field_validator
 
 class UserCreate(BaseModel):
     name: str
@@ -62,8 +63,20 @@ class PatientCreate(BaseModel):
 class PatientOut(PatientCreate):
     id: int
 
+    @field_validator("birth_date", mode="before")
+    @classmethod
+    def convert_datetime_to_date(cls, v):
+        if isinstance(v, datetime):
+            return v.date()
+        return v
+
     class Config:
-        orm_mode = True
+        from_attributes = True
+
+class PatientUpdate(BaseModel):
+    name: Optional[str]
+    birth_date: Optional[date]
+    contact_info: Optional[str]
 
 class LoginRequest(BaseModel):
     email: str

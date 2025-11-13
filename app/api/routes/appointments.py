@@ -12,6 +12,7 @@ from app.core.dependencies import get_current_user
 from app.schemas.schemas import AppointmentFilter,WeeklyAgendaFilter
 from typing import List
 from app.models.models import Appointment
+from app.models.models import UserRole
 from fastapi.responses import StreamingResponse
 import csv
 import io
@@ -45,7 +46,7 @@ def create_appointment(
     # Validación 2: duplicado por paciente
     duplicate = db.query(Appointment).filter(
         Appointment.patient_id == appointment.patient_id,
-        func.date(Appointment.date) == appointment.date.date()
+        func.date(Appointment.date) == appointment.date
     ).first()
 
     if duplicate:
@@ -73,7 +74,7 @@ def get_agenda(
     user=Depends(require_roles("recepcionista", "admin", "profesional"))
 ):
     professional_id = (
-        agenda_filter.professional_id if user["role"] != "profesional" else user["id"]
+    agenda_filter.professional_id if user.role != UserRole.profesional else user.id
     )
 
     query = db.query(Appointment).filter(
@@ -93,7 +94,7 @@ def get_weekly_agenda(
     user=Depends(require_roles("recepcionista", "admin", "profesional"))
 ):
     professional_id = (
-        agenda_filter.professional_id if user["role"] != "profesional" else user["id"]
+        agenda_filter.professional_id if user.role != UserRole.profesional else user.id
     )
 
     query = db.query(Appointment).filter(
