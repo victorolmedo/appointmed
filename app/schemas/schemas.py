@@ -22,7 +22,7 @@ class UserOut(BaseModel):
     role: UserRole
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class AppointmentStatus(str, Enum):
@@ -83,3 +83,8 @@ class WeeklyAgendaFilter(BaseModel):
     status: Optional[str] = None
     professional_id: Optional[int] = None
     
+class UserUpdate(BaseModel):
+    name: Optional[str]
+    email: Optional[str]
+    password: Optional[str]
+    role: Optional[UserRole]

@@ -17,7 +17,15 @@ Este proyecto es una API REST construida con FastAPI para gestionar citas médic
 
 ## 🧱 Estructura del proyecto
 
----
+app/
+├── api/routes/         # Organized endpoints by entity
+├── core/               # Security, dependencies, configuration
+├── crud/               # Database logic
+├── db/                 # Connection and session setup
+├── models/             # SQLAlchemy models
+├── schemas/            # Pydantic schemas
+└── main.py             # Entry point
+
 
 ## 🔐 Roles y permisos
 

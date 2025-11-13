@@ -18,30 +18,30 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
         user = db.query(User).filter(User.email == email).first()
         if user is None:
             raise HTTPException(status_code=401, detail="Usuario no encontrado")
-        return {"email": user.email, "role": user.role, "id": user.id}
+        #return {"email": user.email, "role": user.role, "id": user.id}
+        return user
     except JWTError:
         raise HTTPException(status_code=401, detail="Token inválido")
 
-def require_professional(user=Depends(get_current_user)):
-    if user["role"] != "admin" and user["role"] != "professional":
-        raise HTTPException(status_code=403, detail="Acceso restringido a profesionales")
-    return user
-
-# Nuevo: solo admin
-def require_admin(user=Depends(get_current_user)):
-    if user["role"] != "admin":
+def require_admin(user: User = Depends(get_current_user)):
+    if user.role != "admin":
         raise HTTPException(status_code=403, detail="Acceso restringido a administradores")
     return user
 
-# Nuevo: admin o recepcionista
-def require_admin_or_recepcionista(user=Depends(get_current_user)):
-    if user["role"] not in ["admin", "recepcionista"]:
+def require_professional(user: User = Depends(get_current_user)):
+    if user.role not in ["admin", "professional"]:
+        raise HTTPException(status_code=403, detail="Acceso restringido a profesionales")
+    return user
+
+def require_admin_or_recepcionista(user: User = Depends(get_current_user)):
+    if user.role not in ["admin", "recepcionista"]:
         raise HTTPException(status_code=403, detail="Acceso restringido a recepcionistas o administradores")
     return user
 
 def require_roles(*roles):
-    def checker(user=Depends(get_current_user)):
-        if user["role"] not in roles:
+    def checker(user: User = Depends(get_current_user)):
+        if user.role not in roles:
             raise HTTPException(status_code=403, detail="Acceso restringido")
         return user
     return checker
+
